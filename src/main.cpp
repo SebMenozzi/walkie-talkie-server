@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
         uint16 port;
         std::string receivedMessage = server.receive(&ip, &port);
 
-        if(receivedMessage != "")
+        if(!receivedMessage.empty())
         {
             std::string header = decapsulate(&receivedMessage);
 
@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
                 // The client doesn't exist
                 if (clientExists == FALSE)
                 {
-                    std::cout << ">> Welcome to the client on channel " << channel << " !";
+                    std::cout << ">> Welcome to the client on channel " << channel << " ! ";
                     std::cout << "(" << ip << ":" << port << ")" << std::endl;
 
                     // Add the new client
@@ -85,6 +85,8 @@ int main(int argc, char* argv[])
                 message += " ";
                 message += uint32ToString(nb_clients);
 
+                std::cout << ">> Number of clients on " << channel << " : " << uint32ToString(nb_clients) << std::endl;
+
                 server.send(message, ip, port);
             }
 
@@ -103,6 +105,48 @@ int main(int argc, char* argv[])
                         break;
                     }
                 }
+            }
+
+            if (header == "AUDIO")
+            {
+                std::string channel = decapsulate(&receivedMessage);
+                std::transform(channel.begin(), channel.end(), channel.begin(), ::tolower);
+
+                std::cout << "Receive audio of channel : " << channel << std::endl;
+
+                std::string data = decapsulate(&receivedMessage);
+
+                std::cout << "Data : " << data << std::endl;
+
+                // Search for an existing client
+                for(uint32 i = 0; i < clients.size(); ++i)
+                {
+                    Client &client = clients[i];
+
+                    if (client.channel == channel)
+                    {
+                        std::cout << "Send audio to client (" << client.ip << ":" << client.port << ")" << std::endl;
+                        server.send(data, client.ip, client.port);
+                    }
+                }
+            }
+
+            if (header == "PING")
+            {
+                // Search for an existing client
+                for(uint32 i = 0; i < clients.size(); ++i)
+                {
+                    Client &client = clients[i];
+
+                    if (client.ip == ip && client.port == port)
+                    {
+                        // Update the time of a last message
+                        client.timeLastMessage = clock.time();
+                        break;
+                    }
+                }
+
+                std::cout << "PONG" << std::endl;
             }
         }
 
