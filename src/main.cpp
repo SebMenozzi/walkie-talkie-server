@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <algorithm>
 #include "UDPServer.h"
 #include "clock.h"
 #include "types.h"
