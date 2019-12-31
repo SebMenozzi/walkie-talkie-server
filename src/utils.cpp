@@ -1,7 +1,7 @@
 #include "utils.h"
 #include <sstream>
 
-std::string decapsulate(std::string *message)
+std::string decapsulate(std::string* message)
 {
     std::string header;
 

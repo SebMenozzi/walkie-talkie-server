@@ -59,10 +59,6 @@ void UDPServer::send(std::string message, std::string receiverIP, uint16 receive
     if (receiverAddress.sin_addr.s_addr == 0)
         receiverAddress.sin_addr.s_addr = inet_addr(receiverIP.c_str());
 
-    printf("%zd\n", sendto(this->udpSocket, message.c_str(), message.length() + 1, 0, (sockaddr*) &receiverAddress, sizeof(receiverAddress)));
-
-    /*
     if (sendto(this->udpSocket, message.c_str(), message.length() + 1, 0, (sockaddr*) &receiverAddress, sizeof(receiverAddress)) == -1)
         printf("Failure to send the message!\n");
-    */
 }
