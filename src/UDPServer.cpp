@@ -1,5 +1,6 @@
 #include "UDPServer.h"
 #include <stdio.h>
+#include <cstring>
 
 UDPServer::UDPServer(uint16 port)
 {
