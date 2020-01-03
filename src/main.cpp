@@ -117,6 +117,8 @@ int main(int argc, char* argv[])
                     if (client.ip == ip && client.port == port)
                     {
                         channel = client.channel;
+                        // Update the time of a last message
+                        client.timeLastMessage = clock.time();
                         break;
                     }
                 }
@@ -140,7 +142,7 @@ int main(int argc, char* argv[])
                     {
                         Client &client = clients[i];
 
-                        if (client.channel == channel && client.ip != ip && client.port != port)
+                        if (client.channel == channel && !(client.ip == ip && client.port == port))
                         {
                             std::cout << "Send audio to client (" << client.ip << ":" << client.port << ")" << std::endl;
                             server.send(message, client.ip, client.port);
