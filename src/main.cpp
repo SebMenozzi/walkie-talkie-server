@@ -41,10 +41,8 @@ int main(int argc, char* argv[])
                 {
                     Client &client = clients[i];
 
-                    if (client.ip == ip && client.channel == channel)
+                    if (client.ip == ip && client.port == port && client.channel == channel)
                     {
-                        // Update the port
-                        client.port = port;
                         // Update the time of a last message
                         client.timeLastMessage = clock.time();
                         clientExists = TRUE;
